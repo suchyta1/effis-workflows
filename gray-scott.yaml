@@ -1,0 +1,45 @@
+# Label, used as job name if going through batch scheduler
+jobname: gray-scott
+
+# Top directory where the job runs, (with each code running in subdirectory)
+rundir: jobs/gray-scott-1
+
+# User-defined variable, dereferenced in lines below with ${steps}
+steps: 3000
+build-dir: /Users/eqs/Software/spack/opt/spack/darwin-mojave-x86_64/clang-10.0.1-apple/gray-scott-effis-jgd4szrcmq34umxvpy4fx3ybrlcoeaf5
+
+
+# Machine info
+machine:
+  name: local                       # Matchine to run on (could be summit, theta, etc.)
+  job_setup: gray-scott-setup.sh    # shell script to setup codes
+
+
+# Section for codes that will run
+run:
+
+  # Simulation
+  gray-scott:
+    executable_path: ${build-dir}/simulation/gray-scott
+    commandline_args:
+    - settings-files.json
+    processes: 1                    # Total number of MPI processes
+    processes-per-node: 1           # MPI processes per node
+
+    # Copy these files to code's run directory
+    copy:
+    - ${build-dir}/settings/adios2.xml
+    - ${build-dir}/settings/settings-files.json
+
+    # Edit the following files, Python regular expression syntax
+    file-edit:
+      settings-files.json:
+      - ['"steps": .*,', '"steps": ${steps},']
+
+    # Configurging the ADIOS I/O groups
+    .SimulationOutput:
+      output_path: ${rundir}/gray-scott/custom-name.bp
+      adios_engine: BP4
+      adios_engine_params:
+        RendezvousReaderCount: 0
+

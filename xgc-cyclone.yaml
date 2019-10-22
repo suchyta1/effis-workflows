@@ -1,0 +1,50 @@
+steps:  20
+top:    /Users/eqs/Software/kittie-wdm/
+xgcdir: ${top}/code-config-files/XGC1
+include:
+- ${top}/YAML/new-examples/copies-cyclone.yaml
+
+jobname: xgc-cyclone
+walltime: 3600
+rundir: jobs/xgc-cyclone-8
+
+machine:
+  name: local
+  job_setup: gray-scott-setup.sh
+
+
+run:
+
+  xgc:
+    processes: 8
+    processes-per-node: 8
+    executable_path: /Users/eqs/Software/spack/opt/spack/darwin-mojave-x86_64/clang-10.0.1-apple/xgc-cmake-test-zj6n2vhjo7ywsouoepniwzcqnpyptwer/XGC1/xgc1-es
+    copy: ${xgc-copy}
+    file-edit: ${xgc-edit}
+    pre-submit-commands: ["mkdir timing"]
+
+    .diagnosis.1d:
+      output_path: xgc.oneddiag.bp
+      adios_engine: BP4
+
+    .field3D:
+      output_path: xgc.3d.bp
+      adios_engine: BP4
+      timed: true
+
+
+  #pdf:
+  #  processes: 1
+  #  processes-per-node: 1
+  #  executable_path: /Users/eqs/Software/kittie-wdm/Python/dpot-histogram-kittie.py
+  #  commandline_options:
+  #    varname: dpot
+
+  #  .data:
+  #    reads: xgc.field3D
+
+
+  plot-1D:
+    x: psi
+    data: xgc.diagnosis.1d
+

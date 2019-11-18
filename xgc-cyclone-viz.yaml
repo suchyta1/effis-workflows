@@ -1,5 +1,5 @@
 
-steps:  5
+steps:  20
 top:    /Users/eqs/Software/kittie-wdm/
 xgcdir: ${top}/code-config-files/XGC1
 include:
@@ -7,10 +7,10 @@ include:
 
 jobname: xgc-cyclone
 walltime: 3600
-rundir: jobs/xgc-cyclone-3
+rundir: jobs/xgc-cyclone-viz-2
 
 machine:
-  name: local2
+  name: local
   job_setup: gray-scott-setup.sh
 
 
@@ -31,4 +31,23 @@ run:
     .field3D:
       output_path: xgc.3d.bp
       adios_engine: BP4
+      timed: true
+
+
+  # Insitu analysis, previously post processing
+  pdf:
+    processes: 1
+    processes-per-node: 1
+    executable_path: /Users/eqs/Software/kittie-wdm/Python/dpot-histogram-kittie.py
+    commandline_options:
+      varname: dpot
+
+    .data:
+      reads: xgc.field3D
+
+
+  # Automatic visualization
+  plot-1D:
+    x: psi
+    data: xgc.diagnosis.1d
 

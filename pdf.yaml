@@ -1,6 +1,6 @@
 jobname: xgc-cyclone
 walltime: 3600
-rundir: jobs/pdf-8
+rundir: jobs/pdf-1
 
 machine:
   name: local
@@ -17,6 +17,6 @@ run:
       varname: dpot
 
     .data:
-      output_path: /Users/eqs/Software/effis-workflows/jobs/xgc-cyclone-8/xgc/xgc.3d.bp
+      output_path: /Users/eqs/Software/effis-workflows/jobs/xgc-cyclone-1/xgc/xgc.3d.bp
       adios_engine: BP4
 

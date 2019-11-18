@@ -6,8 +6,9 @@ rundir: jobs/gray-scott-1
 
 # User-defined variable, dereferenced in lines below with ${steps}
 steps: 3000
-build-dir: /Users/eqs/Software/spack/opt/spack/darwin-mojave-x86_64/clang-10.0.1-apple/gray-scott-effis-jgd4szrcmq34umxvpy4fx3ybrlcoeaf5
+build-dir: /Users/eqs/Software/spack/opt/spack/darwin-mojave-x86_64/clang-10.0.1-apple/gray-scott-effis-z6aqslneh2wg27ewjkg2nooyjhvqlqd2
 
+use-dashboard: true
 
 # Machine info
 machine:
@@ -38,8 +39,44 @@ run:
 
     # Configurging the ADIOS I/O groups
     .SimulationOutput:
-      output_path: ${rundir}/gray-scott/custom-name.bp
-      adios_engine: BP4
+      output_path: custom-name.bp
+      adios_engine: SST
       adios_engine_params:
         RendezvousReaderCount: 0
+        
+  # Colormap plot ADIOS output
+  plot-colormap:
+    match-dimensions: 'U[5, :, :]'
+    colortype: Blues
+    data: gray-scott.SimulationOutput
+
+ 
+  # Analysis
+  #pdf:
+  #  executable_path: ${build-dir}/analysis/pdf_calc
+  #  commandline_args:
+  #  - not_relevant
+  #  - not_relevant
+  #  - ${steps}
+
+  #  processes: 1
+  #  processes-per-node: 1
+  #  copy:
+  #  - ${build-dir}/settings/adios2.xml
+
+  #  # Automatically configure coupled I/O according to the writing
+  #  .SimulationOutput:
+  #    reads:  gray-scott.SimulationOutput
+
+  #  .PDFAnalysisOutput:
+  #    output_path: pdf.bp
+  #    adios_engine: SST
+  #    adios_engine_params:
+  #      RendezvousReaderCount: 0
+
+  ## x-y plot for ADIOS output
+  #plot-1D:
+  #  x: 'U/bins'
+  #  y: 'U/pdf[20, :]'
+  #  data: pdf.PDFAnalysisOutput
 

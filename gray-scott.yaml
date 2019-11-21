@@ -2,18 +2,26 @@
 jobname: gray-scott
 
 # Top directory where the job runs, (with each code running in subdirectory)
-rundir: jobs/gray-scott-1
+rundir: jobs/gray-scott-3
 
 # User-defined variable, dereferenced in lines below with ${steps}
 steps: 3000
-build-dir: /Users/eqs/Software/spack/opt/spack/darwin-mojave-x86_64/clang-10.0.1-apple/gray-scott-effis-z6aqslneh2wg27ewjkg2nooyjhvqlqd2
+build-dir: /home/eqs/Software/spack/opt/spack/linux-rhel7-power9le/gcc-9.2.0/gray-scott-effis-tphccruxegfx5ssxq24jxfnsuopxminm
 
-use-dashboard: true
+
+dashboard:
+  use: true
+  shot_name: gs-1
+  run_name:  run1
+  http: /home/eqs/Software/http
+  env:
+    ADIOS: /home/eqs/Software/spack/opt/spack/linux-rhel7-power9le/gcc-9.2.0/adios2-2.5.0-zyxvth7ltcldfsxpjgmcsr52f3pj5mwr/lib64/python3.7/site-packages
+
 
 # Machine info
 machine:
   name: local                       # Matchine to run on (could be summit, theta, etc.)
-  job_setup: gray-scott-setup.sh    # shell script to setup codes
+  #job_setup: gray-scott-setup.sh    # shell script to setup codes
 
 
 # Section for codes that will run

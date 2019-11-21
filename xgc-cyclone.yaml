@@ -1,17 +1,19 @@
 
 steps:  5
-top:    /Users/eqs/Software/kittie-wdm/
-xgcdir: ${top}/code-config-files/XGC1
-include:
-- ${top}/YAML/new-examples/copies-cyclone.yaml
-
 jobname: xgc-cyclone
 walltime: 3600
 rundir: jobs/xgc-cyclone-3
 
 machine:
-  name: local2
-  job_setup: gray-scott-setup.sh
+  name: local
+
+dashboard:
+  use: true
+  shot_name: cyclone-3
+  run_name:  run1
+  http: /home/eqs/Software/http
+  env:
+    ADIOS: /home/eqs/Software/spack/opt/spack/linux-rhel7-power9le/gcc-9.2.0/adios2-2.5.0-zyxvth7ltcldfsxpjgmcsr52f3pj5mwr/lib64/python3.7/site-packages
 
 
 run:
@@ -19,16 +21,20 @@ run:
   xgc:
     processes: 8
     processes-per-node: 8
-    executable_path: /Users/eqs/Software/spack/opt/spack/darwin-mojave-x86_64/clang-10.0.1-apple/xgc-cmake-test-zj6n2vhjo7ywsouoepniwzcqnpyptwer/XGC1/xgc1-es
-    copy: ${xgc-copy}
-    file-edit: ${xgc-edit}
+    executable_path: /home/eqs/Software/spack/opt/spack/linux-rhel7-power9le/gcc-9.2.0/xgc-cmake-test-hp2dstbavdm7mjyieimvmzw7cmgacvtq/XGC1/xgc1-es
+
     pre-submit-commands: ["mkdir timing"]
+    copy-contents:
+      - /home/eqs/Software/XGC-runs/cyclone
+    file-edit:
+      input:
+        - ['^\s*sml_mstep\s*=.*$', 'sml_mstep=${steps}']
 
     .diagnosis.1d:
       output_path: xgc.oneddiag.bp
       adios_engine: BP4
 
-    .field3D:
-      output_path: xgc.3d.bp
-      adios_engine: BP4
 
+  plot-1D:
+    x: psi
+    data: xgc.diagnosis.1d

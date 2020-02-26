@@ -1,0 +1,75 @@
+jobname: xgc-gene
+walltime: 3600
+nphi:  32
+steps: 5
+rundir: /gpfs/alpine/proj-shared/csc143/esuchyta/adse12-15/close-6
+
+pre-submit-commands: ["mkdir coupling"]
+link: 
+- /gpfs/alpine/proj-shared/csc143/esuchyta/XGC-1_inputs
+
+machine:
+  name: summit
+  charge: csc143
+  job_setup: ./setup.sh
+
+
+run:
+
+  gene:
+    pre-submit-commands: ["mkdir out out/timing"]
+    processes: 512
+    processes-per-node: 32
+    cpus-per-process: 1
+    #path: /gpfs/alpine/world-shared/csc143/esuchyta/spack/install/linux-rhel7-ppc64le/gcc-9.1.0/gene-all-gabriele-5tsazdgwlsennsjrytxgn2foozdcnphq/bin/gene_spack-suchyta
+    path: /gpfs/alpine/world-shared/csc143/esuchyta/spack/install/linux-rhel7-ppc64le/gcc-9.1.0/gene-all-gabriele-xn4uk33upraam6ku4vhxvesaym56djhd/bin/gene_spack-suchyta
+
+    .density_coupling:
+      filename: ${rundir}/coupling/density.bp
+      engine: SST
+      params:
+        DataTransport: RDMA
+        ControlTransport: scalable
+
+    .field_coupling:
+      reads: xgc.field_coupling
+
+    copy-contents:
+    - ./GENE
+
+    file-edit:
+      parameters:
+      - - '^\s*n_cuts*\s*=.*$'
+        - 'n_cuts=${nphi}'
+      - - '^\s*ntimesteps\s*=.*$'
+        - 'ntimesteps=${steps}'
+
+
+  xgc:
+    pre-submit-commands: ["mkdir timing restart_dir"]
+    processes: 1344
+    processes-per-node: 42
+    cpus-per-process: 1
+    #path: /gpfs/alpine/world-shared/csc143/esuchyta/spack/install/linux-rhel7-ppc64le/gcc-9.1.0/xgc-all-gabriele-6mjlhi4xy23cm362fe5b44mfbane5zcn/bin/xgc-es
+    path: /gpfs/alpine/world-shared/csc143/esuchyta/spack/install/linux-rhel7-ppc64le/gcc-9.1.0/xgc-all-gabriele-pkr2ra4nfsjvc2olqlqs5gfthxctgafa/bin/xgc-es
+
+    .density_coupling:
+      reads: gene.density_coupling
+
+    .field_coupling:
+      filename: ${rundir}/coupling/field.bp
+      engine: SST
+      params:
+        DataTransport: RDMA
+        ControlTransport: scalable
+
+    copy-contents:
+    - ./XGC
+
+    file-edit:
+      input:
+      - - '^\s*sml_nphi_total\s*=.*$'
+        - 'sml_nphi_total=${nphi}'
+      - - '^\s*sml_mstep\s*=.*$'
+        - 'sml_mstep=${steps}'
+

@@ -1,0 +1,2 @@
+coupling-adse12-15_2019-09-30/GENE/*.h5 filter=lfs diff=lfs merge=lfs -text
+coupling-adse12-15_2019-09-30/XGC/*.bp filter=lfs diff=lfs merge=lfs -text

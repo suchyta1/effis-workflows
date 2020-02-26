@@ -1,0 +1,18 @@
+&perturbation
+GM_perturbation=.true.
+nr=2300
+nz=2300
+npsi=513
+sigma=0.07
+rho0=0.5
+pertw=1D-4
+nky       = 15
+delta_nky = 3
+nzero     = .false.
+radial_gaussian=.true.
+!is this necessary?
+bt_sign = -1.0
+phi_sign= 1.0
+poloidal_envelope = 1
+sigma_chi = 0.7854
+/

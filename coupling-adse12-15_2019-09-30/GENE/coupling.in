@@ -1,0 +1,19 @@
+&coupling                                                                        
+cce_comm_density_mode=1
+cce_side=0
+cce_density_model=6
+cce_alpha=0.5D0
+cce_folder='../coupling'
+cce_first_surface=20
+cce_first_surface_coupling_axis=30
+cce_last_surface_coupling_axis=50
+cce_first_surface_coupling= 80
+cce_last_surface_coupling= 110
+cce_last_surface=179
+cce_all_surface_number=200 !next is LCFS
+cce_first_node=1875
+cce_last_node=212817
+cce_field_model=1
+cce_comm_field_mode=2
+cce_dt= 1.1361342576419598E-007
+/

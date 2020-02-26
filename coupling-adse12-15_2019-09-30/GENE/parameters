@@ -1,0 +1,181 @@
+&parallelization
+n_procs_s =  1
+n_procs_v =  1
+n_procs_w =  8
+n_procs_x =  8
+n_procs_y =  1
+n_procs_z =  8
+
+!(Uncomment and) Set the number of parallel
+!gene subroutines and processes per subroutine.
+!for scanscript or if only a subdomain of the  
+!MPI_COMM_WORLD shall be used                  
+!n_parallel_sims =  1                          
+!n_procs_sim =      1                          
+/                                              
+
+&box
+!!the following parameters define a (minimum) set
+!!for a nonlinear run with adiabatic electrons (CBC like):
+
+n_spec =    1    ! # species
+nx0    =  160    ! # radial grid pts
+nky0   =   16    ! # kys            
+nz0    =   48    ! # parallel grid pts
+nv0    =   32    ! # vpar grid points 
+nw0    =    8    ! # mu grid points   
+
+lx_a  =     0.8
+kymin =     0.05     ! min ky                
+lv    =     3.00     ! domain in vpar        
+lw    =     9.00     ! domain in mu          
+
+x0=0.5
+n0_global=3         
+
+
+!!
+!!Only important for linear runs:
+!!                               
+!!the ky = 0 mode is neglected by default
+!!Uncomment the following line for GAM investigations
+!ky0_ind = 0                                         
+!!                                                   
+!!lx is adapted for each ky to maximize the number   
+!!of connections; uncomment the following line to use
+!!a constant lx instead                              
+!adapt_lx = .f.                                      
+
+!!for simulations dedicated to particular discharges:
+!adapt_ly = T  !!see tutorial or documentation       
+/                                                    
+
+&in_out
+! where to write output files ?
+diagdir = './out'             
+
+! start from checkpoint file ?
+read_checkpoint  = F
+write_checkpoint = F          
+
+! how often to write out various files
+istep_field  =      0                 
+istep_mom    =      0                 
+istep_nrg    =      0                 
+istep_energy =      0                 
+istep_vsp   =       0                 
+istep_schpt =       0                
+istep_omega =       0                 
+
+write_std=F
+write_h5=T 
+adios_xml='gene.xml'
+/                   
+
+&general
+!type of operation
+nonlinear = T     
+x_local=F         
+
+!choice of algorithms:
+!will be detected automatically and written to
+!(output) parameters.dat;                     
+!Uncomment to use a fixed setup               
+perf_vec  =  1 1 1 1 1 1 1 1 1                
+calc_dt=T
+
+!set dt_max if calc_dt = .f.
+dt_max     = 1.4e-2!  2.0e-2 !1.5e-4
+timescheme='RK4' !'RK2'             
+nltdt_off=T                         
+
+!simulation stop criteria
+timelim    =      180000          ! wallclock limit in sec
+ntimesteps =      30    ! 10000 !300000 ! total # timesteps
+simtimelim =      50       ! simulation time limit in L_ref/c_ref
+
+beta       =    0.00    ! 8 pi n_ref T_ref/B_ref^2 in cgs units
+debye2     =    0.00                                           
+
+collision_op = 'none'   !'landau','pitch-angle',...
+coll       =    0.00                               
+
+zeff       =    1.00    !relevant to collisions in single-ion cases
+
+!initial condition, typically 'alm' for linear
+!and 'ppj' for nonlinear runs                 
+init_cond = 'XGC'                             
+init_aux_x=0.07                                  
+init_aux_amp=2.08410667e-02 ! 2.94737191e-02!  5.22408070e-02 !1.87635524e-2 !1.66287653e-02 !1.87635524e-02
+
+!hyperdiffusions
+hyp_z =   -5
+hyp_y =   0.015
+hyp_x =   5.0   
+hyp_v =   5.0 !set to zero if collisions are active
+
+underflow_limit=-1
+/                 
+
+&poloidal_planes
+istep_planes=1
+nz_out=-4       
+n_cuts=32   !8  
+res_fact=1  !8  
+!XGC_file='gene_comp_case5_3mm_fix_n768'
+pre_proc=T                              
+XGC_file='XGC_grid_EQDSK_V_3mm_FF_201rhotor_shift_HR_n384.h5' !XGC_grid_2.h5'
+!XGC_file='XGC_grid_2.h5'                                                    
+sign_phi=-1.0                                                                
+extra_zero=T                                                                 
+/                                                                            
+
+&nonlocal_x
+l_buffer_size =   0.500E-01
+lcoef_krook   =   10.000    
+u_buffer_size =   0.500E-01 
+ucoef_krook   =   10.000    
+ck_heat =   0.0             
+rad_bc_type =  1            
+/
+
+
+&geometry
+magn_geometry = 'chease'
+geomfile='ogyropsi_case5.h5'
+x_def = 'arho_t'
+mag_prof   = T
+rhostar  =   -1
+dpdx_pm  =   -2.0000000
+dpdx_term='full_drift'
+norm_flux_projection  = F
+/
+
+
+&species
+name   = 'ions'
+prof_type =  -1
+kappa_T   =    6.900000
+LT_center =   0.50000000
+LT_width  =   0.20000000E-01
+
+kappa_n   =    2.2200000
+Ln_center =   0.50000000
+Ln_width  =   0.20000000E-01
+
+delta_x_T  =   0.17000000
+delta_x_n  =   0.17000000
+
+mass   =    1.0000000
+temp   =    1.0000000
+dens   =    1.0000000
+charge =  1
+/
+
+&units
+Tref =   -1
+nref =   -1
+mref =   -1
+Bref =   2.0899999999999999E+00
+Lref =   1.6799999999999999E+00
+/

@@ -1,2 +1,3 @@
 [lfs]
 	url = https://www.dropbox.com/sh/sfbmyuj1o50s3y1/AABCreX74f-pFfTkfkan2vFYa?dl=0
+	locksverify = false
